@@ -24,6 +24,28 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## SMTP Configuration (Contact Form)
+
+1. Copy env template:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Configure these values in `.env.local`:
+
+- `SMTP_HOST` (example: `smtp.gmail.com`)
+- `SMTP_PORT` (`587` for TLS or `465` for SSL)
+- `SMTP_USER` (your SMTP username/email)
+- `SMTP_PASS` (app password or SMTP password)
+- `CONTACT_RECEIVER_EMAIL` (where form submissions should arrive)
+
+3. Restart dev server after updating env values.
+
+### Gmail Note
+
+For Gmail, use an **App Password** (not your normal account password) with 2FA enabled.
+
 ## Build for Production
 
 ```bash

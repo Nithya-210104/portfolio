@@ -14,26 +14,34 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: "Nithya Gopalsamy | Software Engineer",
+    default: "Nithya Gopalsamy | Full Stack Developer & DevOps Engineer",
     template: "%s | Nithya Gopalsamy",
   },
   description:
-    "Portfolio of Nithya Gopalsamy, a Full-Stack Web and Mobile Developer building performant products with Next.js, React Native, Node.js, and MongoDB.",
+    "Full Stack Developer with 1.5+ years of experience building cloud-deployed, production-grade web and mobile applications using React Native, Next.js, Node.js, MongoDB, and automated CI/CD pipelines.",
   keywords: [
     "Nithya Gopalsamy",
-    "Software Engineer",
-    "Full-Stack Developer",
-    "React Native",
-    "Next.js",
+    "Full Stack Developer",
+    "React Native Developer",
+    "Next.js Developer",
     "Node.js",
+    "DevOps",
+    "GitHub Actions",
+    "CI/CD Pipelines",
+    "Multitenant SaaS",
+    "MongoDB",
+    "RAG",
+    "LangChain",
+    "FastAPI",
+    "Software Engineer Chennai",
     "Tamil Nadu",
   ],
   authors: [{ name: "Nithya Gopalsamy" }],
-  metadataBase: new URL("https://example.com"),
+  metadataBase: new URL("https://solidpro-es.com"),
   openGraph: {
-    title: "Nithya Gopalsamy | Software Engineer",
+    title: "Nithya Gopalsamy | Full Stack Developer & DevOps Engineer",
     description:
-      "Full-Stack Web and Mobile Developer specializing in Next.js, React Native, Node.js, and cloud deployment.",
+      "Full Stack Developer building production-grade web & mobile apps with React Native, Next.js, Node.js, multitenant SaaS, and CI/CD automation.",
     type: "website",
     locale: "en_IN",
   },
@@ -46,7 +54,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-300">
+        {children}
+      </body>
     </html>
   );
 }

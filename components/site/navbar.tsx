@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-
-import { Menu, X } from "lucide-react";
+import { ArrowUpRight, Code2, Menu, Sparkles, X } from "lucide-react";
 
 import { NAV_ITEMS, PROFILE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -11,6 +10,15 @@ export function Navbar() {
   const ids = useMemo(() => NAV_ITEMS.map((item) => item.href.replace("#", "")), []);
   const [activeSection, setActiveSection] = useState(ids[0]);
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -22,8 +30,8 @@ export function Navbar() {
         });
       },
       {
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: 0.01,
+        rootMargin: "-30% 0px -40% 0px",
+        threshold: 0.1,
       },
     );
 
@@ -36,20 +44,31 @@ export function Navbar() {
   }, [ids]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
-      <nav className="section-shell pt-5">
-        <div className="glass flex items-center justify-between rounded-2xl px-4 py-3">
-          <a href="#home" className="font-heading text-sm font-semibold text-slate-100">
-            {PROFILE.name}
+    <header className="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+      <nav className="section-shell pt-4 sm:pt-5">
+        <div
+          className={cn(
+            "glass flex items-center justify-between rounded-2xl px-4 sm:px-6 py-3 transition-all duration-300",
+            scrolled ? "shadow-xl shadow-cyan-950/20 border-cyan-400/20 bg-slate-950/80" : "bg-slate-950/60",
+          )}
+        >
+          {/* Logo / Brand */}
+          <a href="#home" className="flex items-center gap-2 group">
+            <div className="p-1.5 rounded-lg bg-cyan-400/10 text-cyan-400 border border-cyan-400/20 group-hover:bg-cyan-400/20 transition-colors">
+              <Code2 size={18} />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-heading text-sm sm:text-base font-bold text-white tracking-tight">
+                {PROFILE.name}
+              </span>
+              <span className="text-[10px] text-cyan-300/80 font-medium">
+                {PROFILE.shortRole}
+              </span>
+            </div>
           </a>
-          <button
-            onClick={() => setOpen((prev) => !prev)}
-            className="rounded-lg p-2 text-slate-100 md:hidden"
-            aria-label="Toggle navigation"
-          >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
-          <ul className="hidden items-center gap-2 md:flex">
+
+          {/* Desktop Nav Links */}
+          <ul className="hidden lg:flex items-center gap-1">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.href.replace("#", "");
               return (
@@ -57,8 +76,10 @@ export function Navbar() {
                   <a
                     href={item.href}
                     className={cn(
-                      "rounded-lg px-3 py-2 text-sm transition-colors",
-                      isActive ? "bg-cyan-300/15 text-cyan-200" : "text-slate-300 hover:text-white",
+                      "rounded-xl px-3 py-1.5 text-xs font-medium transition-all",
+                      isActive
+                        ? "bg-cyan-400/15 text-cyan-300 font-semibold border border-cyan-400/25"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800/50",
                     )}
                   >
                     {item.label}
@@ -67,24 +88,62 @@ export function Navbar() {
               );
             })}
           </ul>
+
+          {/* CTA & Mobile Toggle */}
+          <div className="flex items-center gap-2">
+            <a
+              href="#contact"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-400 text-slate-950 text-xs font-semibold hover:bg-cyan-300 transition-colors shadow-sm shadow-cyan-400/20"
+            >
+              <span>Get in Touch</span>
+              <ArrowUpRight size={14} />
+            </a>
+
+            <button
+              onClick={() => setOpen((prev) => !prev)}
+              className="p-2 rounded-xl text-slate-200 hover:text-white hover:bg-slate-800/60 lg:hidden border border-slate-800"
+              aria-label="Toggle navigation"
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
-        {open ? (
-          <div className="glass mt-3 rounded-2xl p-4 md:hidden">
-            <ul className="grid gap-2">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-white/10"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
+
+        {/* Mobile Dropdown */}
+        {open && (
+          <div className="glass mt-2.5 rounded-2xl p-4 lg:hidden border border-slate-800 bg-slate-950/90 shadow-2xl">
+            <ul className="grid gap-1.5">
+              {NAV_ITEMS.map((item) => {
+                const isActive = activeSection === item.href.replace("#", "");
+                return (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "block rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors",
+                        isActive
+                          ? "bg-cyan-400/15 text-cyan-300 font-semibold"
+                          : "text-slate-300 hover:bg-slate-800/60 hover:text-white",
+                      )}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              })}
+              <li className="pt-2">
+                <a
+                  href="#contact"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full p-2.5 rounded-xl bg-cyan-400 text-slate-950 font-semibold text-xs text-center"
+                >
+                  Contact Me <ArrowUpRight size={14} />
+                </a>
+              </li>
             </ul>
           </div>
-        ) : null}
+        )}
       </nav>
     </header>
   );
